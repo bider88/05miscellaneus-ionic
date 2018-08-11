@@ -1,0 +1,7 @@
+{
+  "name": "miscellaneus",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
