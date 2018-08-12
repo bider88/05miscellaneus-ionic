@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
+import { AlertController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
+
 @Component({
   selector: 'page-view2',
   templateUrl: 'view2.html',
 })
 export class View2Page {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController
+  ) {
   }
 
   gotoPage3() {
@@ -41,10 +49,25 @@ export class View2Page {
   ionViewCanEnter(){
     console.log('ionViewCanEnter');
 
-    const number: number = Math.round(Math.random() * 10);
-    console.log(number);
+    return new Promise( ( resolve, reject ) => {
 
-    return number >= 3;
+      this.alertCtrl.create({
+        title: '¿Seguro?',
+        message: '¿Estás seguro de querer entrar?',
+        enableBackdropDismiss: false,
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => resolve(false)
+          },
+          {
+            text: 'Aceptar',
+            handler: () => resolve(true)
+          }
+        ]
+      }).present();
+
+    })
   }
 
   ionViewCanLeave(){
@@ -54,7 +77,14 @@ export class View2Page {
 
     return new Promise( (resolve, reject) => {
 
+      const loading = this.loadingCtrl.create({
+        content: "Espere..."
+      });
+
+      loading.present();
+
       setTimeout(() => {
+        loading.dismiss();
         resolve(true)
       }, 2000);
     })

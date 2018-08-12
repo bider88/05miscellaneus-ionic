@@ -13,7 +13,7 @@ export class MyApp {
   rootPage:any;
 
   constructor(
-    platform: Platform,
+    private platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     private _settingsProvider: SettingsProvider
@@ -23,13 +23,19 @@ export class MyApp {
       this._settingsProvider.loadStorage()
         .then(() => {
 
-          console.log( this._settingsProvider.settings.show_tuto );
-
           if ( this._settingsProvider.settings.show_tuto ) {
             this.rootPage = SlidesPage;
           } else {
             this.rootPage = HomePage;
           }
+
+          this.platform.pause.subscribe( () => {
+            console.log('La aplicación se detendrá...')
+          });
+
+          this.platform.resume.subscribe( () => {
+            console.log('La aplicación se reanudará...')
+          })
 
           // This code will be loaded when load storage has finished
           // Okay, so the platform is ready and our plugins are available.
